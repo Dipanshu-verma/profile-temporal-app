@@ -77,9 +77,24 @@ This demonstrates the power of Temporal for handling time-based operations and e
 - Auth0 account
 - crudcrud.com API key
 
+# Backend Environment Variables
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+AUTH0_DOMAIN=your_auth0_domain
+AUTH0_AUDIENCE=your_auth0_audience
+CRUDCRUD_API_KEY=your_crudcrud_api_key
+TEMPORAL_ADDRESS=localhost:7233
+Create .env file in the client directory with the following variables:
+# Frontend Environment Variables
+VITE_AUTH0_DOMAIN=your_auth0_domain
+VITE_AUTH0_CLIENT_ID=your_auth0_client_id
+VITE_AUTH0_AUDIENCE=your_auth0_audience
+VITE_API_BASE_URL=http://localhost:5000
+
+
 ### Installation
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/profile-temporal-app.git
+git clone https://github.com/Dipanshu-verma/profile-temporal-app.git
 cd profile-temporal-app
