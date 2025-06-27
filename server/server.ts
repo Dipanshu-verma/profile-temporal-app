@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/database');
-const userRoutes = require('./routes/userRoute');
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './config/database';
+import userRoutes from './routes/userRoute';
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ connectDB();
 app.use('/users', userRoutes);
 
 // Health check endpoint
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Profile Temporal App Backend is running!' });
 });
 

@@ -1,7 +1,17 @@
+import mongoose, { Document, Schema } from 'mongoose';
 
-const mongoose = require('mongoose');
+export interface IUser extends Document {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  city: string;
+  pincode: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -31,4 +41,4 @@ const userSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model<IUser>('User', userSchema);

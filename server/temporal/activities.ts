@@ -1,8 +1,18 @@
-const User = require('../models/User');
-const axios = require('axios');
+import User from '../models/User';
+import axios from 'axios';
+
+interface UserData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  city?: string;
+  pincode?: string;
+  updatedAt?: string;
+}
 
 // Activity to save user data to MongoDB
-async function saveUserToDatabase(userData) {
+async function saveUserToDatabase(userData: UserData): Promise<any> {
   try {
     console.log('Saving user to database:', userData.email);
     
@@ -31,11 +41,11 @@ async function saveUserToDatabase(userData) {
 }
 
 // Activity to sync data to CrudCrud
-async function syncToCrudCrud(userData) {
+async function syncToCrudCrud(userData: UserData): Promise<any> {
   try {
     console.log('Syncing data to CrudCrud for:', userData.email);
     
-    const crudCrudData = {
+    const crudCrudData: UserData = {
       email: userData.email,
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -62,7 +72,7 @@ async function syncToCrudCrud(userData) {
     
     console.log('Data successfully synced to CrudCrud:', response.data);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error syncing to CrudCrud:', error.message);
     if (error.response) {
       console.error('Response data:', error.response.data);
@@ -72,7 +82,7 @@ async function syncToCrudCrud(userData) {
   }
 }
 
-module.exports = {
+export {
   saveUserToDatabase,
   syncToCrudCrud,
 };

@@ -1,4 +1,20 @@
-const { proxyActivities, sleep } = require('@temporalio/workflow');
+import { proxyActivities, sleep } from '@temporalio/workflow';
+
+interface UserData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  city?: string;
+  pincode?: string;
+}
+
+interface WorkflowResult {
+  success: boolean;
+  message: string;
+  user: any;
+  crudCrudResult: any;
+}
 
 // Import activities with increased timeout
 const { saveUserToDatabase, syncToCrudCrud } = proxyActivities({
@@ -9,7 +25,7 @@ const { saveUserToDatabase, syncToCrudCrud } = proxyActivities({
 });
 
 // Main workflow for saving user data
-async function saveUserDataWorkflow(userData) {
+async function saveUserDataWorkflow(userData: UserData): Promise<WorkflowResult> {
   console.log('Starting saveUserDataWorkflow for:', userData.email);
   
   try {
@@ -37,6 +53,6 @@ async function saveUserDataWorkflow(userData) {
   }
 }
 
-module.exports = {
+export {
   saveUserDataWorkflow,
 };

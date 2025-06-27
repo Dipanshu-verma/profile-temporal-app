@@ -1,9 +1,19 @@
-const User = require('../models/User');
-const { Connection, Client } = require('@temporalio/client');
-const axios = require('axios');
+import { Request, Response } from 'express';
+import User from '../models/User';
+import { Connection, Client } from '@temporalio/client';
+import axios from 'axios';
+
+interface UserData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  city?: string;
+  pincode?: string;
+}
 
 // Get all users (for development)
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.find().select('-__v');
     res.json(users);
@@ -14,13 +24,14 @@ const getAllUsers = async (req, res) => {
 };
 
 // Get user by email
-const getUserByEmail = async (req, res) => {
+const getUserByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.params;
     const user = await User.findOne({ email }).select('-__v');
     
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'User not found' });
+      return;
     }
     
     res.json(user);
@@ -31,16 +42,17 @@ const getUserByEmail = async (req, res) => {
 };
 
 // Create or login user
-const createOrLoginUser = async (req, res) => {
+const createOrLoginUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, firstName, lastName} = req.body;
+    const { email, firstName, lastName } = req.body;
     
     // Check if user already exists
     let user = await User.findOne({ email });
     
     if (user) {
       // User exists, return existing user
-      return res.json({ message: 'User logged in successfully', user });
+      res.json({ message: 'User logged in successfully', user });
+      return;
     }
     
     // Create new user
@@ -58,9 +70,8 @@ const createOrLoginUser = async (req, res) => {
   }
 };
 
-
 // Update user with Temporal workflow - waiting for completion
-const updateUserWithWorkflow = async (req, res) => {
+const updateUserWithWorkflow = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.params;
     const updateData = req.body;
@@ -68,7 +79,8 @@ const updateUserWithWorkflow = async (req, res) => {
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'User not found' });
+      return;
     }
     
     console.log('Connecting to Temporal...');
@@ -90,7 +102,7 @@ const updateUserWithWorkflow = async (req, res) => {
     
     // Prepare workflow data
     const workflowId = `save-user-data-${email}-${Date.now()}`;
-    const userData = { 
+    const userData: UserData = { 
       email: user.email,
       firstName: updateData.firstName || user.firstName,
       lastName: updateData.lastName || user.lastName,
@@ -125,7 +137,7 @@ const updateUserWithWorkflow = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getAllUsers,
   getUserByEmail,
   createOrLoginUser,

@@ -1,12 +1,12 @@
-const { Worker } = require('@temporalio/worker');
-const activities = require('./activities');
-const connectDB = require('../config/database');
-const dotenv = require('dotenv');
+import { Worker } from '@temporalio/worker';
+import * as activities from './activities';
+import connectDB from '../config/database';
+import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
 
-async function run() {
+async function run(): Promise<void> {
   try {
     console.log('Initializing Temporal worker...');
     
